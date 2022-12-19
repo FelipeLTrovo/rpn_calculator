@@ -1,7 +1,14 @@
 require_relative './commands/rpn_calculator'
+require 'colorize'
 
-expression = "5.6523556 1.44326 2.6341 + *"
-operands = []
-operators = ["+", "-", "*", "/"]
-support_array = []
-cmd = RpnCalculator.new(expression).call
+
+puts "\nPlease type an operand or an operator: ".blue
+puts "\nGet the answer to your expression by inserting the equal symbol '='".blue
+param = ''
+while true do
+  param << gets("=")
+  cmd = RpnCalculator.new(param).call
+  puts "\Expression: #{param}".blue
+  puts "\nResult: #{cmd}".green
+  puts "\nPress Ctrl + C to exit the program.".red
+end
