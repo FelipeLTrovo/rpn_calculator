@@ -9,7 +9,7 @@ class RpnCalculator
 
   def call
     iterate_expression
-    puts @operands.first.round(3)
+    result
   end
 
   private
@@ -40,16 +40,11 @@ class RpnCalculator
       end
   end
 
-  def handle_decimals
-    fourth_decimal = @operands.first.modulo(1).to_s.split('')[5]
-    if fourth_decimal.to_i > 5
+  def result
+    if @operands.size == 1
       return @operands.first.round(3)
     else
-      return ((@operands.first - @operands.first.modulo(1)) +
-              @operands.first.modulo(1).to_s[0...5].to_f)
+      return (@operands[0].to_f + @operands[1].to_f).round(3)
     end
   end
 end
-
-
-
