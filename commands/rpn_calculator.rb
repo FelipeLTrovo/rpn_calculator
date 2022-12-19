@@ -1,35 +1,55 @@
-expression = "2 1 2 + *"
-operands = []
-operators = ["+", "-", "*", "/"]
-support_array = []
+require_relative '../constants/operators'
 
-def perform_operation(a, b, operator)
-  case operator
-    when '+'
-      return a.to_i + b.to_i
-    when '-'
-      return a.to_i - b.to_i
-    when '*'
-      return a.to_i * b.to_i
-    when '/'
-      return a.to_i / b.to_i
-    else
-      return 'invalid operator'
+class RpnCalculator
+  def initialize(expression)
+    @expression = expression
+    @operands = []
+    @support_array = []
+  end
+
+  def call
+    iterate_expression
+    puts @operands.first.round(3)
+  end
+
+  private
+
+  def iterate_expression
+    @expression.split(' ').each do |digit|
+      unless OPERATORS.include?(digit)
+        @operands << digit
+      else
+        @support_array = @operands.pop(2)
+        @operands << perform_operation(@support_array[0], @support_array[1], digit)
+      end
     end
-end
+  end
 
-expression.split(' ').each do |digit|
-  unless operators.include?(digit)
-    operands << digit
-  else
-    support_array = operands.pop(2)
-    operands << perform_operation(support_array[0], support_array[1], digit)
+  def perform_operation(a, b, operator)
+    case operator
+      when '+'
+        return a.to_f + b.to_f
+      when '-'
+        return a.to_f - b.to_f
+      when '*'
+        return a.to_f * b.to_f
+      when '/'
+        return a.to_f / b.to_f
+      else
+        return 'invalid operator'
+      end
+  end
+
+  def handle_decimals
+    fourth_decimal = @operands.first.modulo(1).to_s.split('')[5]
+    if fourth_decimal.to_i > 5
+      return @operands.first.round(3)
+    else
+      return ((@operands.first - @operands.first.modulo(1)) +
+              @operands.first.modulo(1).to_s[0...5].to_f)
+    end
   end
 end
-if operands.size == 1
-  puts operands.first
-elsif operands.size == 2
-  puts operands[0].to_i + operands[1].to_i
-end
-puts operands.first
+
+
 
