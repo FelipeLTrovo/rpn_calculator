@@ -8,11 +8,16 @@ class RpnCalculator
   end
 
   def call
+    sanitize_expression
     iterate_expression
     result
   end
 
   private
+
+  def sanitize_expression
+    @expression.tr!("[A-Za-z]", '')
+  end
 
   def iterate_expression
     @expression.split(' ').each do |digit|
@@ -42,7 +47,7 @@ class RpnCalculator
 
   def result
     if @operands.size == 1
-      return @operands.first.round(3)
+      return @operands.first.to_f.round(3)
     else
       return (@operands[0].to_f + @operands[1].to_f).round(3)
     end
